@@ -1,8 +1,15 @@
 {
-	"name": "angularbuddy2",
+	"name": "drmueller2-angularbuddy2",
 	"displayName": "AngularBuddy2",
 	"description": "Angular Buddy",
 	"version": "0.0.1",
+	"icon": "assets/M.png",
+	"publisher": "DrMueller2",
+	"homepage": "https://github.com/DrMueller/AngularBuddy2",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/DrMueller/AngularBuddy2"
+	},
 	"engines": {
 		"vscode": "^1.36.0"
 	},
@@ -10,16 +17,21 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "extension.deleteAllSpecFiles",
+				"title": "Delete all spec files"
 			}
-		]
+		],
+		"keybindings": {
+			"command": "extension.deleteAllSpecFiles",
+			"key": "ctrl+shift+a",
+			"when": "editorTextFocus"
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

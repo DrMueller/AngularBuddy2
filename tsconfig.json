@@ -16,7 +16,8 @@
 		"strictFunctionTypes": true,
 		"strictNullChecks": true,
 		"noImplicitAny": true,
-		"noImplicitThis": true
+		"noImplicitThis": true,
+		"experimentalDecorators": true
 	},
 	"exclude": [
 		"node_modules",
