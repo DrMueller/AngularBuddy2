@@ -26,7 +26,14 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"lint": "tslint --project tslint.json",
+		"ci-test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"ci-lint": "tslint --project tslint.json --format junit --out testresults/lint-tests.xml",
+		"ci-git-clean": "git reset --hard",
+		"ci-git-config": "git config --global user.email \"matthiasm@live.de\" && git config --global user.name \"Matthias Mueller\"",
+		"ci-vsce-publish": "vsce publish",
+		"ci-execute-tests": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
@@ -38,5 +45,10 @@
 		"typescript": "^3.3.1",
 		"tslint": "^5.12.1",
 		"vscode-test": "^1.0.2"
+	},
+	"dependencies": {
+		"inversify": "^5.0.1",
+		"reflect-metadata": "^0.1.13",
+		"vsce": "^1.66.0"
 	}
 }
