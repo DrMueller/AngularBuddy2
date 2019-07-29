@@ -58,6 +58,7 @@
 		"vscode-test": "^1.0.2"
 	},
 	"dependencies": {
+		"@drmueller/language-extensions": "^2.1.11",
 		"inversify": "^5.0.1",
 		"reflect-metadata": "^0.1.13",
 		"vsce": "^1.66.0"
