@@ -18,7 +18,6 @@ export class SpecDeletionService implements ISpecDeletionService {
 
     public async deleAllSpecFilesAsync(): Promise<void> {
         const specFiles = await this.workspaceFilesFetcher.fetchWorkspaceFilesAsync('**/*.spec.ts', false);
-
         const enquiry = `You are about to delete ${specFiles.length} spec files. Enter \'y\' to continue`;
         const enquiryResult = await this.dialogService.showDialogAsync(enquiry);
 
