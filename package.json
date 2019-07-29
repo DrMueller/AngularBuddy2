@@ -34,17 +34,17 @@
 		}
 	},
 	"scripts": {
-		"compile": "webpack --mode none",
-		"watch": "webpack --mode none --watch",
-		"lint": "tslint --project tslint.json",
-		"ci-lint": "tslint --project tslint.json --format junit --out testresults/lint-tests.xml",
-		"ci-git-clean": "git reset --hard",
-		"ci-git-config": "git config --global user.email \"matthiasm@live.de\" && git config --global user.name \"Matthias Mueller\"",
-		"ci-vsce-publish": "vsce publish",
-		"ci-build-prod": "webpack --mode production",
-		"ci-execute-tests": "npm run ci-compile-for-tests && npm run ci-run-tests",
-		"ci-run-tests": "node ./out/test/runTest.js",
-		"ci-compile-for-tests": "tsc -p ./"
+"compile": "webpack --mode none",
+"watch": "webpack --mode none --watch",
+"lint": "tslint --project tslint.json",
+"ci-lint": "tslint --project tslint.json --format junit --out testresults/lint-tests.xml",
+"ci-git-clean": "git reset --hard",
+"ci-git-config": "git config --global user.email \"matthiasm@live.de\" && git config --global user.name \"Matthias Mueller\"",
+"ci-vsce-publish": "vsce publish",
+"ci-build-prod": "webpack --mode production",
+"ci-execute-tests": "npm run ci-compile-for-tests && npm run ci-run-tests",
+"ci-run-tests": "node ./out/test/runTest.js",
+"ci-compile-for-tests": "tsc -p ./"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
