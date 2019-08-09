@@ -32,7 +32,7 @@
       },
       {
         "command": "extension.alignAllDocumentsToFolderStructure",
-        "title": "Align ALL documents to folder structure"
+        "title": "Align all documents to folder structure"
       }
     ],
     "menus": {

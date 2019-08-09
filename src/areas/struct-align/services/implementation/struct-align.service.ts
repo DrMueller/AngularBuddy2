@@ -34,10 +34,11 @@ export class StructAlignService implements IStructAlignService {
   }
 
   private async fetchHtmlAndTsFilesAsync(): Promise<string[]> {
-    const tsFiles = await this.workspaceFilesFetcher.fetchWorkspaceFilesAsync('**/*.ts', false);
-    const htmlFiles = await this.workspaceFilesFetcher.fetchWorkspaceFilesAsync('**/*.html', false);
-    const files = tsFiles.concat(htmlFiles);
-    return files;
+    const tsFilesPromise = this.workspaceFilesFetcher.fetchWorkspaceFilesAsync('**/*.ts', false);
+    const htmlFilesPromise = this.workspaceFilesFetcher.fetchWorkspaceFilesAsync('**/*.html', false);
+    const files = await Promise.all([tsFilesPromise, htmlFilesPromise]);
+    const flatFiles = files.reduce((a, b) => a.concat(b));
+    return flatFiles;
   }
 
   private async replaceTextMarksInDocumentsAsync(files: string[]): Promise<void> {
