@@ -6,21 +6,30 @@ import { ErrorHandlerService } from '../../infrastructure/error-handling/service
 
 import { IStructAlignService, StructAlignServiceName } from './services';
 import { StructAlignService } from './services/implementation/struct-align.service';
+import { ITextMarkReplacingServant, TextMarkReplacingServantName } from './services/servants';
+import { TextMarkReplacingServant } from './services/servants/implementaation';
 
 export class StructAlignModule {
   public static registerServices(container: Container): void {
     container.bind<IStructAlignService>(StructAlignServiceName).to(StructAlignService);
+    container.bind<ITextMarkReplacingServant>(TextMarkReplacingServantName).to(TextMarkReplacingServant);
   }
 
   public static registerHooks(context: ExtensionContext): void {
-    const cmd = commands.registerTextEditorCommand('extension.alignToFolderStructure',
-    (textEditor: TextEditor, edit: TextEditorEdit) => {
-      ErrorHandlerService.handledAction(() => {
-        const structAlignService = ServiceLocatorService.resolveService<IStructAlignService>(StructAlignServiceName);
-        structAlignService.alignTextMarks(textEditor, edit);
-      });
-    });
+    context.subscriptions.push(commands.registerTextEditorCommand('extension.alignDocumentToFolderStructure',
+      (textEditor: TextEditor, _: TextEditorEdit) => {
+        ErrorHandlerService.handledAction(() => {
+          const structAlignService = ServiceLocatorService.resolveService<IStructAlignService>(StructAlignServiceName);
+          structAlignService.alignTextMarksInDocument(textEditor);
+        });
+      }));
 
-    context.subscriptions.push(cmd);
+    context.subscriptions.push(commands.registerCommand('extension.alignAllDocumentsToFolderStructure',
+      () => {
+        ErrorHandlerService.handledActionAsync(async () => {
+          const structAlignService = ServiceLocatorService.resolveService<IStructAlignService>(StructAlignServiceName);
+          await structAlignService.alignTextMarksInAllDocumentsAsync();
+        });
+      }));
   }
 }

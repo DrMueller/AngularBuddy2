@@ -1,7 +1,9 @@
-import { TextEdit, TextEditor, TextEditorEdit } from 'vscode';
+import { TextEditor, TextEditorEdit } from 'vscode';
 
 export const StructAlignServiceName = 'IStructAlignService';
 
 export interface IStructAlignService {
-  alignTextMarks(absoluteFilePath: TextEditor, edit: TextEditorEdit): void;
+  alignTextMarksInDocument(absoluteFilePath: TextEditor): void;
+
+  alignTextMarksInAllDocumentsAsync(): Promise<void>;
 }

@@ -1,46 +1,57 @@
 import { inject, injectable } from 'inversify';
 import { Range, TextDocument, TextEditor, TextEditorEdit, workspace } from 'vscode';
 
+import { DialogServiceName, IDialogService } from '../../../../infrastructure/vscode-api/dialogs/services';
 import { IInformationService, InformationServiceName } from '../../../../infrastructure/vscode-api/informations/services';
+import { IWorkspaceFilesFetcher, WorkspaceFilesFetcherName } from '../../../../infrastructure/vscode-api/workspace/services';
+import { ITextMarkReplacingServant, TextMarkReplacingServantName } from '../servants';
 import { IStructAlignService } from '../struct-align-service.interface';
 
 @injectable()
 export class StructAlignService implements IStructAlignService {
-
-  public constructor(@inject(InformationServiceName) private infoService: IInformationService) {
+  public constructor(
+    @inject(InformationServiceName) private infoService: IInformationService,
+    @inject(TextMarkReplacingServantName) private textMarkReplacer: ITextMarkReplacingServant,
+    @inject(DialogServiceName) private dialogService: IDialogService,
+    @inject(WorkspaceFilesFetcherName) private workspaceFilesFetcher: IWorkspaceFilesFetcher) {
   }
 
-  public alignTextMarks(textEditor: TextEditor, edit: TextEditorEdit): void {
-    const placeHolder = '%%';
-
-    const namespace = this.getSeparatedRelativeNamespace(textEditor.document);
-
-    const fullText = textEditor.document.getText();
-    const replaceOccurences = fullText.split(placeHolder).length - 1;
-    this.infoService.showInfo(`Replacing ${replaceOccurences} entries..`);
-
-    const replacedText = fullText.split(placeHolder).join(namespace);
-    const allTextRange = new Range(0, 0, textEditor.document.lineCount, fullText.length);
-    edit.replace(allTextRange, replacedText);
-
-    this.infoService.showInfo(`Replaced ${replaceOccurences} entries!`);
+  public alignTextMarksInDocument(textEditor: TextEditor): void {
+    const replacedEntries = this.textMarkReplacer.replaceTextMarksInDocument(textEditor.document);
+    this.propagateEntries(replacedEntries);
   }
 
-  private getSeparatedRelativeNamespace(textDocument: TextDocument): string {
-    // We can't use the workspace path, as we don't know, from which folder the user opens
-    // we search therefore for src/app/ and take this one as starting point
-    let relativePath = textDocument.uri.fsPath;
-    const pathSeparator = relativePath.indexOf('/') > -1 ? '/' : '\\';
+  public async alignTextMarksInAllDocumentsAsync(): Promise<void> {
+    const files = await this.fetchHtmlAndTsFilesAsync();
+    const enquiry = `You are about to check ${files.length} files. Enter \'y\' to continue`;
+    const enquiryResult = await this.dialogService.showDialogAsync(enquiry);
 
-    const startIndex = relativePath.indexOf(`src${pathSeparator}app${pathSeparator}`);
-    if (startIndex > -1) {
-      relativePath = relativePath.substring(startIndex + 8);
+    if (enquiryResult === 'y') {
+      await this.replaceTextMarksInDocumentsAsync(files);
+    } else {
+      this.infoService.showInfo(`Cancelled replacing.`);
     }
+  }
 
-    const fileName = relativePath.split(pathSeparator).pop()!;
-    relativePath = relativePath.replace(fileName, '');
+  private async fetchHtmlAndTsFilesAsync(): Promise<string[]> {
+    const tsFiles = await this.workspaceFilesFetcher.fetchWorkspaceFilesAsync('**/*.ts', false);
+    const htmlFiles = await this.workspaceFilesFetcher.fetchWorkspaceFilesAsync('**/*.html', false);
+    const files = tsFiles.concat(htmlFiles);
+    return files;
+  }
 
-    const pointSeparatedPath = relativePath.split(pathSeparator).join('.');
-    return pointSeparatedPath;
+  private async replaceTextMarksInDocumentsAsync(files: string[]): Promise<void> {
+    const replacePromises = files.map(async filePath => {
+      const document = await workspace.openTextDocument(filePath);
+      return this.textMarkReplacer.replaceTextMarksInDocument(document);
+    });
+
+    const replacedEntries = await Promise.all(replacePromises);
+    const amountOfReplacesEntries = replacedEntries.reduce((prev, current) => prev + current);
+    this.propagateEntries(amountOfReplacesEntries);
+  }
+
+  private propagateEntries(amount: number) {
+    this.infoService.showInfo(`Replaced ${amount} entries!`);
   }
 }

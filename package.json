@@ -27,14 +27,18 @@
         "title": "Delete all spec files"
       },
       {
-        "command": "extension.alignToFolderStructure",
+        "command": "extension.alignDocumentToFolderStructure",
         "title": "Align to folder structure"
+      },
+      {
+        "command": "extension.alignAllDocumentsToFolderStructure",
+        "title": "Align ALL documents to folder structure"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "extension.alignToFolderStructure"
+          "command": "extension.alignDocumentToFolderStructure"
         }
       ]
     },
@@ -45,7 +49,7 @@
         "when": "editorTextFocus"
       },
       {
-        "command": "extension.alignToFolderStructure",
+        "command": "extension.alignDocumentToFolderStructure",
         "key": "ctrl+shift+t",
         "when": "editorFocus"
       }
