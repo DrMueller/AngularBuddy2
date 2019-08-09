@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 
 import { ISpecDeletionService, SpecDeletionServiceName } from '../../../areas/spec-deletion/services/spec-deletion-service.interface';
+import { SpecDeletionModule } from '../../../areas/spec-deletion/spec-deletion.module';
+import { StructAlignModule } from '../../../areas/struct-align';
 import { ServiceLocatorService } from '../../dependency-injection';
 import { ErrorHandlerService } from '../../error-handling/services';
 
@@ -10,13 +12,8 @@ export class CommandRegistrationServant {
   }
 
   private static registerDeleteAllSpecFiles(context: vscode.ExtensionContext): void {
-    const cmd = vscode.commands.registerCommand('extension.deleteAllSpecFiles', () => {
-      ErrorHandlerService.handledAction(() => {
-        const specDeletionService = ServiceLocatorService.resolveService<ISpecDeletionService>(SpecDeletionServiceName);
-        specDeletionService.deleAllSpecFilesAsync();
-      });
-    });
+    SpecDeletionModule.registerHooks(context);
+    StructAlignModule.registerHooks(context);
 
-    context.subscriptions.push(cmd);
   }
 }

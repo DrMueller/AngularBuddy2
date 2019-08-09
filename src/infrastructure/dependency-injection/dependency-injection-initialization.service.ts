@@ -1,7 +1,8 @@
 import { Container } from 'inversify';
 import 'reflect-metadata';
 
-import { SpecDeletionServiceRegistry } from '../../areas/spec-deletion/spec-deletion-service-registry';
+import { SpecDeletionModule } from '../../areas/spec-deletion/spec-deletion.module';
+import { StructAlignModule } from '../../areas/struct-align';
 import { InfrastructureServiceRegistry } from '../infrastructure-service-registry';
 
 import { ServiceLocatorService } from './service-locator.service';
@@ -15,7 +16,8 @@ export class DependencyInjectionInitializationService {
 
   private static applyMappings(container: Container): void {
     // Areas
-    SpecDeletionServiceRegistry.register(container);
+    SpecDeletionModule.registerServices(container);
+    StructAlignModule.registerServices(container);
 
     // Infrastructure
     InfrastructureServiceRegistry.register(container);

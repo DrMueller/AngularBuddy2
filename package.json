@@ -1,69 +1,87 @@
 {
-	"name": "angularbuddy2",
-	"displayName": "AngularBuddy2",
-	"description": "Angular Buddy 2",
-	"version": "0.0.1",
-	"icon": "assets/M.png",
-	"publisher": "DrMueller2",
-	"homepage": "https://github.com/DrMueller/AngularBuddy2",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/DrMueller/AngularBuddy2"
-	},
-	"engines": {
-		"vscode": "^1.36.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"*"
-	],
-	"main": "./dist/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.deleteAllSpecFiles",
-				"title": "Delete all spec files"
-			}
-		],
-		"keybindings": {
-			"command": "extension.deleteAllSpecFiles",
-			"key": "ctrl+shift+a",
-			"when": "editorTextFocus"
-		}
-	},
-	"scripts": {
-"compile": "webpack --mode none",
-"watch": "webpack --mode none --watch",
-"lint": "tslint --project tslint.json",
-"ci-lint": "tslint --project tslint.json --format junit --out testresults/lint-tests.xml",
-"ci-git-clean": "git reset --hard",
-"ci-git-config": "git config --global user.email \"matthiasm@live.de\" && git config --global user.name \"Matthias Mueller\"",
-"ci-vsce-publish": "vsce publish",
-"ci-build-prod": "webpack --mode production",
-"ci-execute-tests": "npm run ci-compile-for-tests && npm run ci-run-tests",
-"ci-run-tests": "node ./out/test/runTest.js",
-"ci-compile-for-tests": "tsc -p ./"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.6",
-		"@types/node": "^10.12.21",
-		"@types/vscode": "^1.36.0",
-		"glob": "^7.1.4",
-		"mocha": "^6.1.4",
-		"ts-loader": "^6.0.4",
-		"tslint": "^5.12.1",
-		"typescript": "^3.3.1",
-		"vscode-test": "^1.0.2",
-		"webpack": "^4.38.0",
-		"webpack-cli": "^3.3.6"
-	},
-	"dependencies": {
-		"@drmueller/language-extensions": "^2.1.11",
-		"inversify": "^5.0.1",
-		"reflect-metadata": "^0.1.13",
-		"vsce": "^1.66.0"
-	}
+  "name": "angularbuddy2",
+  "displayName": "AngularBuddy2",
+  "description": "Angular Buddy 2",
+  "version": "0.0.1",
+  "icon": "assets/M.png",
+  "publisher": "DrMueller2",
+  "homepage": "https://github.com/DrMueller/AngularBuddy2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DrMueller/AngularBuddy2"
+  },
+  "engines": {
+    "vscode": "^1.36.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.deleteAllSpecFiles",
+        "title": "Delete all spec files"
+      },
+      {
+        "command": "extension.alignToFolderStructure",
+        "title": "Align to folder structure"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "extension.alignToFolderStructure"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "extension.deleteAllSpecFiles",
+        "key": "ctrl+shift+a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "extension.alignToFolderStructure",
+        "key": "ctrl+shift+t",
+        "when": "editorFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "webpack --mode none",
+    "watch": "webpack --mode none --watch",
+    "lint": "tslint --project tslint.json",
+    "ci-lint": "tslint --project tslint.json --format junit --out testresults/lint-tests.xml",
+    "ci-git-clean": "git reset --hard",
+    "ci-git-config": "git config --global user.email \"matthiasm@live.de\" && git config --global user.name \"Matthias Mueller\"",
+    "ci-vsce-publish": "vsce publish",
+    "ci-build-prod": "webpack --mode production",
+    "ci-execute-tests": "npm run ci-compile-for-tests && npm run ci-run-tests",
+    "ci-run-tests": "node ./out/test/runTest.js",
+    "ci-compile-for-tests": "tsc -p ./"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^10.12.21",
+    "@types/vscode": "^1.36.0",
+    "glob": "^7.1.4",
+    "mocha": "^6.1.4",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.1",
+    "vscode-test": "^1.0.2",
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "@drmueller/language-extensions": "^2.1.11",
+    "inversify": "^5.0.1",
+    "reflect-metadata": "^0.1.13",
+    "vsce": "^1.66.0"
+  }
 }
